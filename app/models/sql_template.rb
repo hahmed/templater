@@ -4,7 +4,14 @@ class SqlTemplate < ApplicationRecord
   validates :locale, inclusion: I18n.available_locales.map(&:to_s)
   validates :handler, inclusion: ActionView::Template::Handlers.extensions.map(&:to_s)
 
+  after_save do
+    SqlTemplate::Resolver.instance.clear_cache
+  end
+
   class Resolver < ActionView::Resolver
+    require 'singleton'
+    include Singleton
+
     protected
 
     def find_templates(name, prefix, partial, details)
@@ -15,7 +22,7 @@ class SqlTemplate < ApplicationRecord
         handler: normalize_array(details[:handlers]).first,
         partial: partial || false
       }
-      puts conditions.inspect
+
       ::SqlTemplate.where(conditions).map do |record|
         initialize_template(record)
       end

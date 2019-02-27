@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_26_211004) do
+ActiveRecord::Schema.define(version: 2019_02_27_074347) do
 
   create_table "sql_templates", force: :cascade do |t|
     t.text "body"
@@ -19,6 +19,12 @@ ActiveRecord::Schema.define(version: 2019_02_26_211004) do
     t.string "locale"
     t.string "handler"
     t.boolean "partial", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
